@@ -1,0 +1,7 @@
+CREATE TABLE store (
+  store_id BIGINT  NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  PRIMARY KEY (store_id)
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 1;
