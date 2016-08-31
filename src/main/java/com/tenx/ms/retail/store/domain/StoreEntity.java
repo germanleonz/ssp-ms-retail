@@ -1,4 +1,4 @@
-package com.tenx.ms.retail.domain;
+package com.tenx.ms.retail.store.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

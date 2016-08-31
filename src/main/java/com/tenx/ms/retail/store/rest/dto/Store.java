@@ -1,4 +1,4 @@
-package com.tenx.ms.retail.rest.dto;
+package com.tenx.ms.retail.store.rest.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,8 +15,20 @@ public class Store {
     @NotNull
     private String name;
 
+    public Store() {
+    }
+
+    public Store(Long storeId, String name) {
+        this.storeId = storeId;
+        this.name = name;
+    }
+
     public Long getStoreId() {
         return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
     }
 
     public String getName() {
