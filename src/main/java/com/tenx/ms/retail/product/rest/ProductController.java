@@ -72,7 +72,7 @@ public class ProductController {
     @RequestMapping(value = "/{storeId:\\d+}/{productId:\\d+}", method = RequestMethod.GET)
     public Product getProductById(
             @PathVariable("storeId") Long storeId,
-            @PathVariable("productId") Long productId) {
+            @PathVariable("productId") Long productId) throws ResourceNotFoundException {
         Optional<Product> optionalProduct = productService.getById(storeId, productId);
         if (optionalProduct.isPresent()) {
             return optionalProduct.get();

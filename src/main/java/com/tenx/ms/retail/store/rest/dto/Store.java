@@ -15,14 +15,6 @@ public class Store {
     @NotNull
     private String name;
 
-    public Store() {
-    }
-
-    public Store(Long storeId, String name) {
-        this.storeId = storeId;
-        this.name = name;
-    }
-
     public Long getStoreId() {
         return storeId;
     }

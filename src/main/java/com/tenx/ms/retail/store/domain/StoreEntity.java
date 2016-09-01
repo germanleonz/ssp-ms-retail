@@ -19,16 +19,7 @@ public class StoreEntity {
     @Column(name="name")
     private String name;
 
-    public StoreEntity() {
-    }
-
-    public StoreEntity(String name) {
-        this.name = name;
-    }
-
-    public Long getStoreId() {
-        return storeId;
-    }
+    public Long getStoreId() { return storeId; }
 
     public String getName() {
         return name;

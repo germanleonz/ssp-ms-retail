@@ -30,22 +30,9 @@ public class ProductEntity {
     @Column(name = "price")
     private BigDecimal price;
 
-    public ProductEntity() {
-    }
-
-    public ProductEntity(Long storeId, String name, String description, String sku, BigDecimal price) {
-        this.storeId = storeId;
-        this.name = name;
-        this.description = description;
-        this.sku = sku;
-        this.price = price;
-    }
-
     public Long getProductId() {
         return productId;
     }
-
-    public void setProductId(Long productId) { this.productId = productId; }
 
     public Long getStoreId() {
         return storeId;

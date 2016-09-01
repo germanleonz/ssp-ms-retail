@@ -67,7 +67,7 @@ public class StoreController {
     })
     @RequestMapping(value = "/{storeId:\\d+}", method = RequestMethod.GET)
     public Store getStoreById(
-            @PathVariable("storeId") Long storeId) {
+            @PathVariable("storeId") Long storeId) throws ResourceNotFoundException {
         Optional<Store> optionalStore = storeService.getById(storeId);
         if (optionalStore.isPresent()) {
             return optionalStore.get();
