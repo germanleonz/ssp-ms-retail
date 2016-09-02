@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +38,7 @@ public class StoreController {
     })
     @RequestMapping(method = RequestMethod.POST)
     public ResourceCreated<Long> create(
-            @RequestBody Store store) {
+            @Validated @RequestBody Store store) {
         Long storeId = storeService.create(store);
         return new ResourceCreated<>(storeId);
     }

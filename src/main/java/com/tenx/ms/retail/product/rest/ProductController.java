@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +40,7 @@ public class ProductController {
     @RequestMapping(value = "/{storeId:\\d+}", method = RequestMethod.POST)
     public ResourceCreated<Long> create(
             @PathVariable("storeId") Long storeId,
-            @RequestBody Product product) {
+            @Validated @RequestBody Product product) {
         product.setStoreId(storeId);
         Long productId = productService.create(product);
         return new ResourceCreated<>(productId);

@@ -1,5 +1,6 @@
 package com.tenx.ms.retail.product.domain;
 
+import com.tenx.ms.retail.stock.domain.StockEntity;
 import com.tenx.ms.retail.store.domain.StoreEntity;
 
 import javax.persistence.Column;
@@ -7,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.GeneratedValue;
 import java.math.BigDecimal;
@@ -35,8 +37,9 @@ public class ProductEntity {
     @JoinColumn(name="store_id")
     private StoreEntity store;
 
-//    @OneToOne(orphanRemoval = true)
-//    private StockEntity stock;
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "product_id")
+    private StockEntity stock;
 
     public Long getProductId() {
         return productId;
@@ -82,11 +85,11 @@ public class ProductEntity {
         this.store = store;
     }
 
-//    public StockEntity getStock() {
-//        return stock;
-//    }
-//
-//    public void setStock(StockEntity stock) {
-//        this.stock = stock;
-//    }
+    public StockEntity getStock() {
+        return stock;
+    }
+
+    public void setStock(StockEntity stock) {
+        this.stock = stock;
+    }
 }

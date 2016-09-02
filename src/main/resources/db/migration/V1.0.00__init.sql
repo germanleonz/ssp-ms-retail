@@ -21,7 +21,7 @@ CREATE TABLE stock (
   store_id BIGINT NOT NULL,
   product_id BIGINT NOT NULL,
   count INTEGER NOT NULL,
-  PRIMARY KEY (store_id, product_id),
+  PRIMARY KEY (product_id),
   FOREIGN KEY (store_id) REFERENCES store (store_id),
   FOREIGN KEY (product_id) REFERENCES product (product_id)
 )

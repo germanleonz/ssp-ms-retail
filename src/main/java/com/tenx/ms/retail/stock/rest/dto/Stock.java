@@ -2,20 +2,20 @@ package com.tenx.ms.retail.stock.rest.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 
 public class Stock {
     @ApiModelProperty(value = "Store Id", readOnly = true)
-    @NotNull
     private Long storeId;
 
     @ApiModelProperty(value = "Product Id", readOnly = true)
-    @NotNull
     private Long productId;
 
     @ApiModelProperty(value = "Stock count")
     @NotNull
+    @Min(1)
     private Integer count;
 
     public Long getStoreId() {

@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +37,7 @@ public class StockController {
     public void upsertProductStock(
             @PathVariable("storeId") Long storeId,
             @PathVariable("productId") Long productId,
-            @RequestBody Stock stock) {
+            @Validated @RequestBody Stock stock) {
         stock.setStoreId(storeId);
         stock.setProductId(productId);
         stockService.upsert(stock);
