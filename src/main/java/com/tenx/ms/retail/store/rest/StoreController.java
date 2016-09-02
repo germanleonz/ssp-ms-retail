@@ -75,4 +75,7 @@ public class StoreController {
             throw new ResourceNotFoundException("Store not found");
         }
     }
+
+    // TODO
+    // Endpoint for deleting stores
 }

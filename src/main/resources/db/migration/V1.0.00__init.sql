@@ -3,7 +3,6 @@ CREATE TABLE store (
   name VARCHAR(50) NOT NULL,
   PRIMARY KEY (store_id)
 )
-  ENGINE = InnoDB
   AUTO_INCREMENT = 1;
 
 CREATE TABLE product (
@@ -13,8 +12,16 @@ CREATE TABLE product (
   description VARCHAR(100) NOT NULL,
   sku VARCHAR(10) NOT NULL,
   price DECIMAL(5, 2) UNSIGNED NOT NULL,
-  PRIMARY KEY (product_id)
+  PRIMARY KEY (product_id),
+  FOREIGN KEY (store_id) REFERENCES store (store_id)
 )
-  ENGINE = InnoDB
-  AUTO_INCREMENT = 1
+  AUTO_INCREMENT = 1;
 
+CREATE TABLE stock (
+  store_id BIGINT NOT NULL,
+  product_id BIGINT NOT NULL,
+  count INTEGER NOT NULL,
+  PRIMARY KEY (store_id, product_id),
+  FOREIGN KEY (store_id) REFERENCES store (store_id),
+  FOREIGN KEY (product_id) REFERENCES product (product_id)
+)

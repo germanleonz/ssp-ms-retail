@@ -80,4 +80,7 @@ public class ProductController {
             throw new ResourceNotFoundException("Product not found");
         }
     }
+
+    // TODO
+    // Endpoint for deleting products
 }

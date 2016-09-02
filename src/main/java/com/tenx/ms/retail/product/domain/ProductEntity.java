@@ -1,8 +1,12 @@
 package com.tenx.ms.retail.product.domain;
 
+import com.tenx.ms.retail.store.domain.StoreEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.GeneratedValue;
 import java.math.BigDecimal;
@@ -12,33 +16,31 @@ import java.math.BigDecimal;
 public class ProductEntity {
     @Id
     @GeneratedValue
-    @Column(name="product_id")
+    @Column(name="product_id", nullable = false)
     private Long productId;
 
-    @Column(name="store_id")
-    private Long storeId;
-
-    @Column(name="name")
+    @Column(name="name", nullable = false)
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "sku")
+    @Column(name = "sku", nullable = false)
     private String sku;
 
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name="store_id")
+    private StoreEntity store;
+
+//    @OneToOne(orphanRemoval = true)
+//    private StockEntity stock;
 
     public Long getProductId() {
         return productId;
     }
-
-    public Long getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(Long storeId) { this.storeId = storeId; }
 
     public String getName() {
         return name;
@@ -71,4 +73,20 @@ public class ProductEntity {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
+    public StoreEntity getStore() {
+        return store;
+    }
+
+    public void setStore(StoreEntity store) {
+        this.store = store;
+    }
+
+//    public StockEntity getStock() {
+//        return stock;
+//    }
+//
+//    public void setStock(StockEntity stock) {
+//        this.stock = stock;
+//    }
 }

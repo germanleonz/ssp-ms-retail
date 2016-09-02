@@ -12,11 +12,9 @@ import java.math.BigDecimal;
 @ApiModel("Product - Product Information holder")
 public class Product {
     @ApiModelProperty(value = "Product Id", readOnly = true)
-    @NotNull
     private Long productId;
 
     @ApiModelProperty(value = "Store Id", readOnly = true)
-    @NotNull
     private Long storeId;
 
     @ApiModelProperty(value = "Product name")
