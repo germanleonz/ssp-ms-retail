@@ -21,13 +21,13 @@ public class ProductEntity {
     @Column(name="product_id", nullable = false)
     private Long productId;
 
-    @Column(name="name", nullable = false)
+    @Column(name="name", nullable = false, length = 255)
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 255)
     private String description;
 
-    @Column(name = "sku", nullable = false)
+    @Column(name = "sku", nullable = false, length = 10)
     private String sku;
 
     @Column(name = "price", nullable = false)

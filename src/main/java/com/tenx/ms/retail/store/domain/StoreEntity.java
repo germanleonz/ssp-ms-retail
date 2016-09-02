@@ -20,7 +20,7 @@ public class StoreEntity {
     @Column(name="store_id", nullable = false)
     private Long storeId;
 
-    @Column(name="name", nullable = false)
+    @Column(name="name", nullable = false, length = 255)
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "store")

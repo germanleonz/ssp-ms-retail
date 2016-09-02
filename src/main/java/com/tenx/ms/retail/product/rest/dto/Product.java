@@ -2,6 +2,7 @@ package com.tenx.ms.retail.product.rest.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
@@ -18,15 +19,17 @@ public class Product {
     private Long storeId;
 
     @ApiModelProperty(value = "Product name")
-    @NotNull
+    @NotBlank
+    @Size(max = 255)
     private String name;
 
     @ApiModelProperty(value = "Product description")
-    @NotNull
+    @NotBlank
+    @Size(max = 255)
     private String description;
 
     @ApiModelProperty(value = "Product SKU - Stock Keeping Unit")
-    @NotNull
+    @NotBlank
     @Size(min=5, max=10)
     private String sku;
 

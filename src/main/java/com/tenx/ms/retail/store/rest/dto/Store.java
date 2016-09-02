@@ -2,8 +2,9 @@ package com.tenx.ms.retail.store.rest.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @ApiModel("Store - Store Information holder")
 public class Store {
@@ -12,7 +13,8 @@ public class Store {
     private Long storeId;
 
     @ApiModelProperty(value="Store name")
-    @NotNull
+    @NotBlank
+    @Size(max = 255)
     private String name;
 
     public Long getStoreId() {
