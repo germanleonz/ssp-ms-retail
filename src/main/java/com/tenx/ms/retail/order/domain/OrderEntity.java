@@ -26,7 +26,8 @@ public class OrderEntity {
     @Column(name="status", nullable = false, length = 7)
     private String status;
 
-    @Column(name = "order_date", columnDefinition = "datetime")
+    @Column(name = "order_date", columnDefinition = "datetime default current_timestamp",
+            insertable = false, nullable = false)
     private LocalDateTime orderDate;
 
     @Column(name="first_name", nullable = false, length = 255)
@@ -41,19 +42,16 @@ public class OrderEntity {
     @Column(name = "phone", nullable = false, length = 10)
     private String phone;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "order")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "order_id", nullable = false)
     private List<OrderProductEntity> orderProducts;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = StoreEntity.class)
     @JoinColumn(name = "store_id")
-    private StoreEntity orderStore;
+    private StoreEntity store;
 
     public Long getOrderId() {
         return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
     }
 
     public String getStatus() {
@@ -100,10 +98,6 @@ public class OrderEntity {
         return orderDate;
     }
 
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
-    }
-
     public List<OrderProductEntity> getOrderProducts() {
         return orderProducts;
     }
@@ -112,12 +106,12 @@ public class OrderEntity {
         this.orderProducts = orderProducts;
     }
 
-    public StoreEntity getOrderStore() {
-        return orderStore;
+    public StoreEntity getStore() {
+        return store;
     }
 
-    public void setOrderStore(StoreEntity orderStore) {
-        this.orderStore = orderStore;
+    public void setStore(StoreEntity store) {
+        this.store = store;
     }
 
     @Override
@@ -131,7 +125,7 @@ public class OrderEntity {
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", orderProducts=" + orderProducts +
-                ", orderStore=" + orderStore +
+                ", store=" + store +
                 '}';
     }
 }

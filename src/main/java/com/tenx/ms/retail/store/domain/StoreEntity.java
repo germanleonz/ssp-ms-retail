@@ -36,11 +36,11 @@ public class StoreEntity {
         this.name = name;
     }
 
-    public List<ProductEntity> getStoreProducts() {
+    public List<ProductEntity> getProducts() {
         return products;
     }
 
-    public void setStoreProducts(List<ProductEntity> products) {
+    public void setProducts(List<ProductEntity> products) {
         this.products = products;
     }
 }

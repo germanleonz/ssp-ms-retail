@@ -25,6 +25,10 @@ public class OrderProduct {
         return orderProductId;
     }
 
+    public void setOrderProductId(Long orderProductId) {
+        this.orderProductId = orderProductId;
+    }
+
     public Long getOrderId() {
         return orderId;
     }

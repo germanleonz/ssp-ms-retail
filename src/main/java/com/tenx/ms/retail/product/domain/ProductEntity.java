@@ -92,4 +92,17 @@ public class ProductEntity {
     public void setStock(StockEntity stock) {
         this.stock = stock;
     }
+
+    @Override
+    public String toString() {
+        return "ProductEntity{" +
+                "productId=" + productId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", sku='" + sku + '\'' +
+                ", price=" + price +
+                ", store=" + store +
+                ", stock=" + stock +
+                '}';
+    }
 }

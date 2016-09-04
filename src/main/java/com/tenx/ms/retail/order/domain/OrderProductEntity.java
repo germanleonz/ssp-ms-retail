@@ -1,13 +1,11 @@
 package com.tenx.ms.retail.order.domain;
 
-import com.tenx.ms.retail.product.domain.ProductEntity;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+//import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,26 +13,23 @@ import javax.persistence.Table;
 public class OrderProductEntity {
     @Id
     @GeneratedValue
-    @Column(name = "order_product_id", nullable = false)
+    @Column(name = "order_product_id", nullable = false, insertable = false)
     private Long orderProductId;
 
     @Column(name = "count", nullable = false)
     private Integer count;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
-    private OrderEntity order;
-
-    @ManyToOne
+    @Column(name = "product_id", nullable = false)
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
-    private ProductEntity product;
+    private Long productId;
+
+//    @ManyToOne
+//    @JoinColumn(name = "order_id", referencedColumnName = "order_id",
+//            nullable = false, updatable = false, insertable = false)
+//    private OrderEntity order;
 
     public Long getOrderProductId() {
         return orderProductId;
-    }
-
-    public void setOrderProductId(Long orderProductId) {
-        this.orderProductId = orderProductId;
     }
 
     public Integer getCount() {
@@ -45,20 +40,20 @@ public class OrderProductEntity {
         this.count = count;
     }
 
-    public OrderEntity getOrder() {
-        return order;
+//    public OrderEntity getOrder() {
+//        return order;
+//    }
+
+//    public void setOrder(OrderEntity order) {
+//        this.order = order;
+//    }
+
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setOrder(OrderEntity order) {
-        this.order = order;
-    }
-
-    public ProductEntity getProduct() {
-        return product;
-    }
-
-    public void setProduct(ProductEntity product) {
-        this.product = product;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     @Override
@@ -66,8 +61,8 @@ public class OrderProductEntity {
         return "OrderProductEntity{" +
                 "orderProductId=" + orderProductId +
                 ", count=" + count +
-                ", order=" + order +
-                ", product=" + product +
+//                ", order=" + order +
+                ", productId=" + productId +
                 '}';
     }
 }

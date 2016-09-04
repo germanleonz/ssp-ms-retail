@@ -1,9 +1,8 @@
 CREATE TABLE store (
-  store_id BIGINT  NOT NULL AUTO_INCREMENT,
+  store_id BIGINT NOT NULL AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL,
   PRIMARY KEY (store_id)
-)
-  AUTO_INCREMENT = 1;
+);
 
 CREATE TABLE product (
   product_id BIGINT NOT NULL AUTO_INCREMENT,
@@ -14,8 +13,7 @@ CREATE TABLE product (
   price DECIMAL(5, 2) UNSIGNED NOT NULL,
   PRIMARY KEY (product_id),
   FOREIGN KEY (store_id) REFERENCES store (store_id)
-)
-  AUTO_INCREMENT = 1;
+);
 
 CREATE TABLE stock (
   store_id BIGINT NOT NULL,
@@ -29,7 +27,7 @@ CREATE TABLE stock (
 CREATE TABLE product_order (
   order_id BIGINT NOT NULL AUTO_INCREMENT,
   store_id BIGINT NOT NULL,
-  order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+  order_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   first_name VARCHAR(255) NOT NULL,
   last_name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
@@ -37,8 +35,7 @@ CREATE TABLE product_order (
   status VARCHAR(7) NOT NULL,
   PRIMARY KEY (order_id),
   FOREIGN KEY (store_id) REFERENCES store (store_id)
-)
-  AUTO_INCREMENT = 1;
+);
 
 CREATE TABLE order_product (
   order_product_id BIGINT NOT NULL AUTO_INCREMENT,
@@ -48,5 +45,4 @@ CREATE TABLE order_product (
   PRIMARY KEY (order_product_id),
   FOREIGN KEY (order_id) REFERENCES product_order (order_id),
   FOREIGN KEY (product_id) REFERENCES product (product_id)
-)
-  AUTO_INCREMENT = 1;
+);
