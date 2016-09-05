@@ -8,11 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@SuppressWarnings("PMD.MethodNamingConventions")
 public interface ProductRepository extends JpaRepository<ProductEntity, Long>{
-    List<ProductEntity> findAllByStore_StoreId(Long storeId);
+    List<ProductEntity> findAllByStoreStoreId(Long storeId);
 
-    List<ProductEntity> findAllByStore_StoreIdAndName(Long storeId, String productName);
+    List<ProductEntity> findAllByStoreStoreIdAndName(Long storeId, String productName);
 
-    Optional<ProductEntity> findOneByStore_StoreIdAndProductId(Long storeId, Long productId);
+    Optional<ProductEntity> findOneByStoreStoreIdAndProductId(Long storeId, Long productId);
 }

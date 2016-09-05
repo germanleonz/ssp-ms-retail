@@ -27,17 +27,17 @@ public class ProductService {
     private final ModelMapper mapper = new ModelMapper();
 
     public Optional<Product> getById(Long storeId, Long productId) {
-        Optional<ProductEntity> optionalProductEntity = productRepository.findOneByStore_StoreIdAndProductId(storeId, productId);
+        Optional<ProductEntity> optionalProductEntity = productRepository.findOneByStoreStoreIdAndProductId(storeId, productId);
         return optionalProductEntity.flatMap(entity -> Optional.of(mapper.map(entity, Product.class)));
     }
 
     public List<Product> getAll(Long storeId) {
-        List<ProductEntity> productEntities = productRepository.findAllByStore_StoreId(storeId);
+        List<ProductEntity> productEntities = productRepository.findAllByStoreStoreId(storeId);
         return productEntities.stream().map(entity -> mapper.map(entity, Product.class)).collect(Collectors.toList());
     }
 
     public List<Product> getAllByName(Long storeId, String productName) {
-        List<ProductEntity> productEntities = productRepository.findAllByStore_StoreIdAndName(storeId, productName);
+        List<ProductEntity> productEntities = productRepository.findAllByStoreStoreIdAndName(storeId, productName);
         return productEntities.stream().map(entity -> mapper.map(entity, Product.class)).collect(Collectors.toList());
     }
 

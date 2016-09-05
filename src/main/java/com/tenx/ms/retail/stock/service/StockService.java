@@ -37,7 +37,7 @@ public class StockService {
         StockEntity se = mapper.map(stock, StockEntity.class);
 
         Optional<StoreEntity> ste = storeRepository.findOneByStoreId(storeId);
-        Optional<ProductEntity> pe = productRepository.findOneByStore_StoreIdAndProductId(storeId, productId);
+        Optional<ProductEntity> pe = productRepository.findOneByStoreStoreIdAndProductId(storeId, productId);
 
         se.setStore(ste.orElseThrow(() -> new ResourceNotFoundException("Stock's store not found")));
         se.setProduct(pe.orElseThrow(() -> new ResourceNotFoundException("Stock's product not found")));
@@ -46,7 +46,7 @@ public class StockService {
     }
 
     public Optional<Stock> findById(Long storeId, Long productId) {
-        Optional<StockEntity> optionalStockEntity = stockRepository.findOneByStore_StoreIdAndProductId(storeId, productId);
+        Optional<StockEntity> optionalStockEntity = stockRepository.findOneByStoreStoreIdAndProductId(storeId, productId);
         return optionalStockEntity.flatMap(entity -> Optional.of(mapper.map(entity, Stock.class)));
     }
 }
