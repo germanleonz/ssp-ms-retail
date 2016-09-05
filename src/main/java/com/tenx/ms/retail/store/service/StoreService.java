@@ -4,8 +4,6 @@ import com.tenx.ms.retail.store.domain.StoreEntity;
 import com.tenx.ms.retail.store.repository.StoreRepository;
 import com.tenx.ms.retail.store.rest.dto.Store;
 import org.modelmapper.ModelMapper;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -17,9 +15,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class StoreService {
-
-    @Autowired
-    private static final Logger LOGGER = LoggerFactory.getLogger(StoreService.class);
 
     @Autowired
     private StoreRepository storeRepository;
@@ -51,7 +46,6 @@ public class StoreService {
     public void delete(Long storeId) throws ResourceNotFoundException {
         Optional<Store> optionalStore = this.getById(storeId);
         optionalStore.orElseThrow(() -> new ResourceNotFoundException(String.format("Store (%d) not found.", storeId)));
-        LOGGER.info("Store to delete {}", optionalStore.get());
         storeRepository.delete(storeId);
     }
 }
