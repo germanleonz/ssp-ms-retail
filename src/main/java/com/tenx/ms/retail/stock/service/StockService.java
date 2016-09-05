@@ -44,4 +44,9 @@ public class StockService {
 
         stockRepository.save(se);
     }
+
+    public Optional<Stock> findById(Long storeId, Long productId) {
+        Optional<StockEntity> optionalStockEntity = stockRepository.findOneByStore_StoreIdAndProductId(storeId, productId);
+        return optionalStockEntity.flatMap(entity -> Optional.of(mapper.map(entity, Stock.class)));
+    }
 }

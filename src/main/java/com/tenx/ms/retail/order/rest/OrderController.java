@@ -2,6 +2,7 @@ package com.tenx.ms.retail.order.rest;
 
 import com.tenx.ms.commons.rest.RestConstants;
 import com.tenx.ms.commons.rest.dto.ResourceCreated;
+import com.tenx.ms.retail.order.exception.BackorderedItemsException;
 import com.tenx.ms.retail.order.rest.dto.Order;
 import com.tenx.ms.retail.order.service.OrderService;
 import io.swagger.annotations.Api;
@@ -9,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +36,7 @@ public class OrderController {
     @RequestMapping(value = "/{storeId:\\d+}", method = RequestMethod.POST)
     public ResourceCreated<Long> create(
             @PathVariable Long storeId,
-            @Validated @RequestBody Order order) {
+            @Validated @RequestBody Order order) throws ResourceNotFoundException, BackorderedItemsException {
         order.setStoreId(storeId);
         Long orderId = orderService.create(order);
         return new ResourceCreated<>(orderId);
