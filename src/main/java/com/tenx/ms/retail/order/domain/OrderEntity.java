@@ -12,7 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -28,7 +30,8 @@ public class OrderEntity {
 
     @Column(name = "order_date", columnDefinition = "datetime default current_timestamp",
             insertable = false, nullable = false)
-    private LocalDateTime orderDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date orderDate;
 
     @Column(name="first_name", nullable = false, length = 255)
     private String firstName;
@@ -46,7 +49,7 @@ public class OrderEntity {
     @JoinColumn(name = "order_id", nullable = false)
     private List<OrderProductEntity> orderProducts;
 
-    @ManyToOne(targetEntity = StoreEntity.class)
+    @ManyToOne
     @JoinColumn(name = "store_id")
     private StoreEntity store;
 
@@ -94,7 +97,7 @@ public class OrderEntity {
         this.phone = phone;
     }
 
-    public LocalDateTime getOrderDate() {
+    public Date getOrderDate() {
         return orderDate;
     }
 
@@ -112,20 +115,5 @@ public class OrderEntity {
 
     public void setStore(StoreEntity store) {
         this.store = store;
-    }
-
-    @Override
-    public String toString() {
-        return "OrderEntity{" +
-                "orderId=" + orderId +
-                ", status='" + status + '\'' +
-                ", orderDate=" + orderDate +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", orderProducts=" + orderProducts +
-                ", store=" + store +
-                '}';
     }
 }

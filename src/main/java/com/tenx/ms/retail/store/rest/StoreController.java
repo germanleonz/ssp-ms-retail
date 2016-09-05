@@ -77,6 +77,15 @@ public class StoreController {
         }
     }
 
-    // TODO
-    // Endpoint for deleting stores
+    @ApiOperation(value = "Delete a store by id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful deletion of a store"),
+            @ApiResponse(code = 404, message = "Store not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @RequestMapping(value = "/{storeId:\\d+}", method = RequestMethod.DELETE)
+    public void delete(
+            @PathVariable("storeId") Long storeId) throws ResourceNotFoundException {
+        storeService.delete(storeId);
+    }
 }

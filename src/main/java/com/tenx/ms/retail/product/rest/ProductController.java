@@ -82,6 +82,16 @@ public class ProductController {
         }
     }
 
-    // TODO
-    // Endpoint for deleting products
+    @ApiOperation(value = "Delete a product by id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful deletion of a product"),
+            @ApiResponse(code = 404, message = "Product not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @RequestMapping(value = "/{storeId:\\d+}/{productId:\\d+}", method = RequestMethod.DELETE)
+    public void delete(
+            @PathVariable("storeId") Long storeId,
+            @PathVariable("productId") Long productId) throws ResourceNotFoundException {
+        productService.delete(storeId, productId);
+    }
 }

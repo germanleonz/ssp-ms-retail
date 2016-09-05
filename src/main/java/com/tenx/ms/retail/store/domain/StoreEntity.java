@@ -1,5 +1,6 @@
 package com.tenx.ms.retail.store.domain;
 
+import com.tenx.ms.retail.order.domain.OrderEntity;
 import com.tenx.ms.retail.product.domain.ProductEntity;
 
 import javax.persistence.CascadeType;
@@ -26,6 +27,9 @@ public class StoreEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "store")
     private List<ProductEntity> products;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "store")
+    private List<OrderEntity> orders;
+
     public Long getStoreId() { return storeId; }
 
     public String getName() {
@@ -42,5 +46,13 @@ public class StoreEntity {
 
     public void setProducts(List<ProductEntity> products) {
         this.products = products;
+    }
+
+    public List<OrderEntity> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderEntity> orders) {
+        this.orders = orders;
     }
 }

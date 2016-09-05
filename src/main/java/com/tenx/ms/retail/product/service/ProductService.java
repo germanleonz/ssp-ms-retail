@@ -46,10 +46,15 @@ public class ProductService {
         ProductEntity pe = mapper.map(product, ProductEntity.class);
 
         Optional<StoreEntity> se = storeRepository.findOneByStoreId(product.getStoreId());
-
         pe.setStore(se.orElseThrow(() -> new ResourceNotFoundException("Product's store not found")));
 
         pe = productRepository.save(pe);
         return pe.getProductId();
+    }
+
+    public void delete(Long storeId, Long productId) throws ResourceNotFoundException {
+        Optional<Product> optionalProduct = this.getById(storeId, productId);
+        optionalProduct.orElseThrow(() -> new ResourceNotFoundException(String.format("Product (%d) not found.", productId)));
+        productRepository.delete(productId);
     }
 }

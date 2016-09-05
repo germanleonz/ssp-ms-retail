@@ -1,11 +1,13 @@
 package com.tenx.ms.retail.order.domain;
 
+import com.tenx.ms.retail.product.domain.ProductEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-//import javax.persistence.ManyToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -23,10 +25,9 @@ public class OrderProductEntity {
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     private Long productId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "order_id", referencedColumnName = "order_id",
-//            nullable = false, updatable = false, insertable = false)
-//    private OrderEntity order;
+    @ManyToOne
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    private ProductEntity product;
 
     public Long getOrderProductId() {
         return orderProductId;
@@ -40,14 +41,6 @@ public class OrderProductEntity {
         this.count = count;
     }
 
-//    public OrderEntity getOrder() {
-//        return order;
-//    }
-
-//    public void setOrder(OrderEntity order) {
-//        this.order = order;
-//    }
-
     public Long getProductId() {
         return productId;
     }
@@ -56,13 +49,11 @@ public class OrderProductEntity {
         this.productId = productId;
     }
 
-    @Override
-    public String toString() {
-        return "OrderProductEntity{" +
-                "orderProductId=" + orderProductId +
-                ", count=" + count +
-//                ", order=" + order +
-                ", productId=" + productId +
-                '}';
+    public ProductEntity getProduct() {
+        return product;
+    }
+
+    public void setProduct(ProductEntity product) {
+        this.product = product;
     }
 }

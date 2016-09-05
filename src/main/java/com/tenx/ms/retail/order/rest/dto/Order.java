@@ -4,13 +4,12 @@ import com.tenx.ms.commons.validation.constraints.Email;
 import com.tenx.ms.commons.validation.constraints.PhoneNumber;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public class Order {
@@ -21,8 +20,7 @@ public class Order {
     private Long storeId;
 
     @ApiModelProperty(value = "Order date", readOnly = true)
-    @DateTimeFormat
-    private LocalDateTime orderDate;
+    private Date orderDate;
 
     @ApiModelProperty(value = "Order status")
     @NotBlank
@@ -72,11 +70,11 @@ public class Order {
         this.storeId = storeId;
     }
 
-    public LocalDateTime getOrderDate() {
+    public Date getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(LocalDateTime orderDate) {
+    public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -126,20 +124,5 @@ public class Order {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "orderId=" + orderId +
-                ", storeId=" + storeId +
-                ", orderDate=" + orderDate +
-                ", status='" + status + '\'' +
-                ", products=" + products +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                '}';
     }
 }

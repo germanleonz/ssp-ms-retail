@@ -1,17 +1,21 @@
 package com.tenx.ms.retail.product.domain;
 
+import com.tenx.ms.retail.order.domain.OrderProductEntity;
 import com.tenx.ms.retail.stock.domain.StockEntity;
 import com.tenx.ms.retail.store.domain.StoreEntity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.GeneratedValue;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name="product")
@@ -33,13 +37,16 @@ public class ProductEntity {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name="store_id")
     private StoreEntity store;
 
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "product_id")
     private StockEntity stock;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "product")
+    private List<OrderProductEntity> orderProducts;
 
     public Long getProductId() {
         return productId;
@@ -93,16 +100,11 @@ public class ProductEntity {
         this.stock = stock;
     }
 
-    @Override
-    public String toString() {
-        return "ProductEntity{" +
-                "productId=" + productId +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", sku='" + sku + '\'' +
-                ", price=" + price +
-                ", store=" + store +
-                ", stock=" + stock +
-                '}';
+    public List<OrderProductEntity> getOrderProducts() {
+        return orderProducts;
+    }
+
+    public void setOrderProducts(List<OrderProductEntity> orderProducts) {
+        this.orderProducts = orderProducts;
     }
 }
