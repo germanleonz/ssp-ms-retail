@@ -5,11 +5,11 @@ import com.tenx.ms.retail.store.repository.StoreRepository;
 import com.tenx.ms.retail.store.rest.dto.Store;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,9 +21,9 @@ public class StoreService {
 
     private final ModelMapper mapper = new ModelMapper();
 
-    public Optional<Store> getById(Long storeId) {
+    public Store getById(Long storeId) throws NoSuchElementException {
         Optional<StoreEntity> optionalStoreEntity = storeRepository.findOneByStoreId(storeId);
-        return optionalStoreEntity.flatMap(entity -> Optional.of(mapper.map(entity, Store.class)));
+        return optionalStoreEntity.map(entity -> mapper.map(entity, Store.class)).get();
     }
 
     public List<Store> getAll() {
@@ -43,9 +43,10 @@ public class StoreService {
         return se.getStoreId();
     }
 
-    public void delete(Long storeId) throws ResourceNotFoundException {
-        Optional<Store> optionalStore = this.getById(storeId);
-        optionalStore.orElseThrow(() -> new ResourceNotFoundException(String.format("Store (%d) not found.", storeId)));
-        storeRepository.delete(storeId);
+    public void delete(Long storeId) throws NoSuchElementException {
+        Store store = this.getById(storeId);
+        if (store != null) {
+            storeRepository.delete(storeId);
+        }
     }
 }

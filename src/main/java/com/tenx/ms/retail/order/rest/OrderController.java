@@ -10,7 +10,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +35,7 @@ public class OrderController {
     @RequestMapping(value = "/{storeId:\\d+}", method = RequestMethod.POST)
     public ResourceCreated<Long> create(
             @PathVariable Long storeId,
-            @Validated @RequestBody Order order) throws ResourceNotFoundException, BackorderedItemsException {
+            @Validated @RequestBody Order order) throws BackorderedItemsException {
         order.setStoreId(storeId);
         Long orderId = orderService.create(order);
         return new ResourceCreated<>(orderId);

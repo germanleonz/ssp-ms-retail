@@ -10,13 +10,13 @@ import com.tenx.ms.retail.product.service.ProductService;
 import com.tenx.ms.retail.stock.rest.dto.Stock;
 import com.tenx.ms.retail.stock.service.StockService;
 import com.tenx.ms.retail.store.domain.StoreEntity;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import com.tenx.ms.retail.store.repository.StoreRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
@@ -38,24 +38,26 @@ public class OrderService {
     private final ModelMapper mapper = new ModelMapper();
 
     @Transactional
-    public Long create(Order order) throws ResourceNotFoundException, BackorderedItemsException {
+    public Long create(Order order) throws NoSuchElementException, BackorderedItemsException {
         OrderEntity oe = mapper.map(order, OrderEntity.class);
 
         Long storeId = order.getStoreId();
         Optional<StoreEntity> se = storeRepository.findOneByStoreId(storeId);
-        oe.setStore(se.orElseThrow(() -> new ResourceNotFoundException(String.format("Store (%d) not found", storeId))));
+        oe.setStore(se.orElseThrow(() -> new NoSuchElementException(String.format("Store (%d) not found", storeId))));
 
         for (OrderProductEntity orderProduct: oe.getOrderProducts()) {
             Long productId = orderProduct.getProductId();
-            Optional<Product> optionalProduct = productService.getById(storeId, productId);
-            optionalProduct.orElseThrow(() -> new ResourceNotFoundException(String.format("Product (%d) not found", productId)));
+            Product product = productService.getById(storeId, productId);
+            if (product == null) {
+                throw new NoSuchElementException(String.format("Product (%d) not found", productId));
+            }
 
-            Optional<Stock> stock = stockService.findById(storeId, productId);
-            if (stock.isPresent() && stock.get().getCount() >= orderProduct.getCount()) {
+            Stock stock = stockService.findById(storeId, productId);
+            if (stock.getCount() >= orderProduct.getCount()) {
                 Stock stockUpdate = new Stock();
                 stockUpdate.setStoreId(storeId);
                 stockUpdate.setProductId(productId);
-                stockUpdate.setCount(stock.get().getCount() - orderProduct.getCount());
+                stockUpdate.setCount(stock.getCount() - orderProduct.getCount());
                 stockService.upsert(stockUpdate);
             } else {
                 throw new BackorderedItemsException();

@@ -7,11 +7,11 @@ import com.tenx.ms.retail.store.domain.StoreEntity;
 import com.tenx.ms.retail.store.repository.StoreRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,9 +26,9 @@ public class ProductService {
 
     private final ModelMapper mapper = new ModelMapper();
 
-    public Optional<Product> getById(Long storeId, Long productId) {
+    public Product getById(Long storeId, Long productId) {
         Optional<ProductEntity> optionalProductEntity = productRepository.findOneByStoreStoreIdAndProductId(storeId, productId);
-        return optionalProductEntity.flatMap(entity -> Optional.of(mapper.map(entity, Product.class)));
+        return optionalProductEntity.map(entity -> mapper.map(entity, Product.class)).get();
     }
 
     public List<Product> getAll(Long storeId) {
@@ -42,19 +42,20 @@ public class ProductService {
     }
 
     @Transactional
-    public Long create(Product product) throws ResourceNotFoundException {
+    public Long create(Product product) throws NoSuchElementException {
         ProductEntity pe = mapper.map(product, ProductEntity.class);
 
         Optional<StoreEntity> se = storeRepository.findOneByStoreId(product.getStoreId());
-        pe.setStore(se.orElseThrow(() -> new ResourceNotFoundException("Product's store not found")));
+        pe.setStore(se.orElseThrow(() -> new NoSuchElementException("Product's store not found")));
 
         pe = productRepository.save(pe);
         return pe.getProductId();
     }
 
-    public void delete(Long storeId, Long productId) throws ResourceNotFoundException {
-        Optional<Product> optionalProduct = this.getById(storeId, productId);
-        optionalProduct.orElseThrow(() -> new ResourceNotFoundException(String.format("Product (%d) not found.", productId)));
-        productRepository.delete(productId);
+    public void delete(Long storeId, Long productId) {
+        Product product = this.getById(storeId, productId);
+        if (product != null) {
+            productRepository.delete(productId);
+        }
     }
 }

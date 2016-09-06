@@ -9,10 +9,10 @@ import com.tenx.ms.retail.store.domain.StoreEntity;
 import com.tenx.ms.retail.store.repository.StoreRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -39,14 +39,14 @@ public class StockService {
         Optional<StoreEntity> ste = storeRepository.findOneByStoreId(storeId);
         Optional<ProductEntity> pe = productRepository.findOneByStoreStoreIdAndProductId(storeId, productId);
 
-        se.setStore(ste.orElseThrow(() -> new ResourceNotFoundException("Stock's store not found")));
-        se.setProduct(pe.orElseThrow(() -> new ResourceNotFoundException("Stock's product not found")));
+        se.setStore(ste.orElseThrow(() -> new NoSuchElementException("Stock's store not found")));
+        se.setProduct(pe.orElseThrow(() -> new NoSuchElementException("Stock's product not found")));
 
         stockRepository.save(se);
     }
 
-    public Optional<Stock> findById(Long storeId, Long productId) {
+    public Stock findById(Long storeId, Long productId) {
         Optional<StockEntity> optionalStockEntity = stockRepository.findOneByStoreStoreIdAndProductId(storeId, productId);
-        return optionalStockEntity.flatMap(entity -> Optional.of(mapper.map(entity, Stock.class)));
+        return optionalStockEntity.map(entity -> mapper.map(entity, Stock.class)).get();
     }
 }
