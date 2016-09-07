@@ -49,7 +49,7 @@ public class OrderEntity {
     @JoinColumn(name = "order_id", nullable = false)
     private List<OrderProductEntity> orderProducts;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = StoreEntity.class)
     @JoinColumn(name = "store_id")
     private StoreEntity store;
 

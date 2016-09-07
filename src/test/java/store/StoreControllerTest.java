@@ -1,18 +1,20 @@
 package store;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.tenx.ms.commons.rest.RestConstants;
 import com.tenx.ms.commons.rest.dto.ResourceCreated;
 import com.tenx.ms.retail.RetailServiceApp;
 import com.tenx.ms.retail.store.rest.dto.Store;
 import common.util.RequestHandler;
+import org.apache.commons.io.FileUtils;
 import org.flywaydb.test.annotation.FlywayTest;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,23 +23,27 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 @SpringApplicationConfiguration(classes = RetailServiceApp.class)
+@SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
 public class StoreControllerTest extends RequestHandler {
 
     static {
-        REQUEST_URI = "%s" + API_VERSION + "/stores/";
+        requestUri = "%s" + API_VERSION + "/stores/";
     }
+
+    @Value("classpath:store/success/valid_store.json")
+    private File validStore;
+
+    @Value("classpath:store/failure/invalid_store.json")
+    private File invalidStore;
 
     @Test
     @FlywayTest
     public void testCreate() {
         Long expectedStoreId = Long.valueOf(4L);
 
-        Store store = new Store();
-        store.setName("Test store");
-
-        ResponseEntity<String> creationResponse = handleRequest("", HttpStatus.CREATED, HttpMethod.POST, store);
-
         try {
+            String storeString = FileUtils.readFileToString(validStore);
+            ResponseEntity<String> creationResponse = handleRequest("", HttpStatus.CREATED, HttpMethod.POST, storeString);
             ResourceCreated<Long> responseBody = mapper.readValue(creationResponse.getBody(), new TypeReference<ResourceCreated<Long>>() {});
             assertEquals("Store Ids do not match", expectedStoreId, responseBody.getId());
         } catch (IOException e) {
@@ -48,8 +54,12 @@ public class StoreControllerTest extends RequestHandler {
     @Test
     @FlywayTest
     public void testCreatePreconditionFailed() {
-        Store storeWithoutName = new Store();
-        handleRequest("", HttpStatus.PRECONDITION_FAILED, HttpMethod.POST, storeWithoutName);
+        try {
+            String storeString = FileUtils.readFileToString(invalidStore);
+            handleRequest("", HttpStatus.PRECONDITION_FAILED, HttpMethod.POST, storeString);
+        } catch (IOException ioe) {
+            fail(ioe.getMessage());
+        }
     }
 
     @Test

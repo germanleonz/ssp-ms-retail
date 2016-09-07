@@ -15,18 +15,16 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, FlywayTestExecutionListener.class})
 @ActiveProfiles(Profiles.TEST_NOAUTH)
-public abstract class RequestHandler extends AbstractIntegrationTest {
+public class RequestHandler extends AbstractIntegrationTest {
 
     protected static final String API_VERSION = RestConstants.VERSION_ONE;
 
-    protected static String REQUEST_URI;
+    protected static String requestUri;
 
     private static final String OBJECT_MAPPER_BEAN = "objectMapper";
 
@@ -38,23 +36,19 @@ public abstract class RequestHandler extends AbstractIntegrationTest {
     @Qualifier(OBJECT_MAPPER_BEAN)
     protected ObjectMapper mapper;
 
-    protected <T> ResponseEntity<String> handleRequest(String tId, HttpStatus expectedHttpStatus, HttpMethod httpMethod, T content) {
-        ResponseEntity<String> response = null;
-        try {
-            response = getJSONResponse(
-                    template,
-                    String.format(REQUEST_URI, basePath()) + tId,
-                    (content != null) ? mapper.writeValueAsString(content) : null,
-                    httpMethod
-            );
-            assertEquals(WRONG_STATUS_MESSAGE, expectedHttpStatus, response.getStatusCode());
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
+    protected ResponseEntity<String> handleRequest(String tId, HttpStatus expectedHttpStatus, HttpMethod httpMethod, String content) {
+        ResponseEntity<String> response = getJSONResponse(
+                template,
+                String.format(requestUri, basePath()) + tId,
+                content,
+                httpMethod
+        );
+        assertEquals(WRONG_STATUS_MESSAGE, expectedHttpStatus, response.getStatusCode());
+
         return response;
     }
 
-    protected <T> ResponseEntity<String> handleRequest(String tId, HttpStatus expectedHttpStatus, HttpMethod httpMethod) {
+    protected ResponseEntity<String> handleRequest(String tId, HttpStatus expectedHttpStatus, HttpMethod httpMethod) {
         return handleRequest(tId, expectedHttpStatus, httpMethod, null);
     }
 }

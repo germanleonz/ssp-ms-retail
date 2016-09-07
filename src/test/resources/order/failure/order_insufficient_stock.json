@@ -1,0 +1,13 @@
+{
+  "firstName": "German",
+  "lastName": "Leon",
+  "email": "germanleonz@gmail.com",
+  "phone": "2123456789",
+  "products": [
+    {
+      "productId": 1,
+      "count": 99999999
+    }
+  ],
+  "status": "ordered"
+}

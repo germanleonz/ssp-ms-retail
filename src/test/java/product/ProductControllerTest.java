@@ -2,20 +2,21 @@ package product;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.tenx.ms.commons.rest.RestConstants;
 import com.tenx.ms.commons.rest.dto.ResourceCreated;
 import com.tenx.ms.retail.RetailServiceApp;
 import com.tenx.ms.retail.product.rest.dto.Product;
 import common.util.RequestHandler;
+import org.apache.commons.io.FileUtils;
 import org.flywaydb.test.annotation.FlywayTest;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.Assert.fail;
@@ -23,12 +24,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 
+@SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
 @SpringApplicationConfiguration(classes = RetailServiceApp.class)
 public class ProductControllerTest extends RequestHandler {
 
     static {
-        REQUEST_URI = "%s" + API_VERSION + "/products/";
+        requestUri = "%s" + API_VERSION + "/products/";
     }
+
+    @Value("classpath:product/success/valid_product.json")
+    private File validProduct;
+
+    @Value("classpath:product/failure/invalid_product.json")
+    private File invalidProduct;
+
+    @Value("classpath:product/failure/product_non_existent_store.json")
+    private File productNonExistentStore;
 
     @Test
     @FlywayTest
@@ -36,16 +47,10 @@ public class ProductControllerTest extends RequestHandler {
         Long expectedProductId = Long.valueOf(3L);
         Long storeId = Long.valueOf(1L);
 
-        Product product = new Product();
-        product.setStoreId(storeId);
-        product.setName("Test product");
-        product.setDescription("My product's description");
-        product.setSku("abcdefg");
-        product.setPrice(new BigDecimal("123.45"));
-
-        ResponseEntity<String> createProductResponse = handleRequest(Long.toString(storeId), HttpStatus.CREATED, HttpMethod.POST, product);
-
         try {
+            String productString = FileUtils.readFileToString(validProduct);
+            ResponseEntity<String> createProductResponse = handleRequest(Long.toString(storeId), HttpStatus.CREATED, HttpMethod.POST, productString);
+
             ResourceCreated<Long> creationResponse = mapper.readValue(createProductResponse.getBody(), new TypeReference<ResourceCreated<Long>>() {});
             Long actualProductId = creationResponse.getId();
             assertEquals("Product Ids do not match", expectedProductId, actualProductId);
@@ -59,14 +64,12 @@ public class ProductControllerTest extends RequestHandler {
     public void testCreatePreconditionFailed() {
         Long storeId = Long.valueOf(1L);
 
-        Product product = new Product();
-        product.setStoreId(storeId);
-        product.setName("Test product");
-        product.setDescription("My product's description");
-        product.setSku("abcdefg");
-        product.setPrice(new BigDecimal("123.45"));
-
-        handleRequest(Long.toString(storeId), HttpStatus.CREATED, HttpMethod.POST, product);
+        try {
+            String productString = FileUtils.readFileToString(invalidProduct);
+            handleRequest(Long.toString(storeId), HttpStatus.PRECONDITION_FAILED, HttpMethod.POST, productString);
+        } catch (IOException ioe) {
+            fail(ioe.getMessage());
+        }
     }
 
     @Test
@@ -74,14 +77,12 @@ public class ProductControllerTest extends RequestHandler {
     public void testCreateNoSuchElementException() {
         Long nonExistentStoreId = Long.MAX_VALUE;
 
-        Product product = new Product();
-        product.setStoreId(nonExistentStoreId);
-        product.setName("Test product");
-        product.setDescription("My product's description");
-        product.setSku("abcdefg");
-        product.setPrice(new BigDecimal("123.45"));
-
-        handleRequest(Long.toString(nonExistentStoreId), HttpStatus.NOT_FOUND, HttpMethod.POST, product);
+        try {
+            String productString = FileUtils.readFileToString(productNonExistentStore);
+            handleRequest(Long.toString(nonExistentStoreId), HttpStatus.NOT_FOUND, HttpMethod.POST, productString);
+        } catch (IOException ioe) {
+            fail(ioe.getMessage());
+        }
     }
 
     @Test
@@ -145,7 +146,7 @@ public class ProductControllerTest extends RequestHandler {
     @FlywayTest
     public void testDelete() {
         Long storeId = Long.valueOf(1L);
-        Long productToDeleteId = Long.valueOf(2L);
+        Long productToDeleteId = Long.valueOf(1L);
         String urlId = storeId + "/" + productToDeleteId;
 
         handleRequest(urlId, HttpStatus.NO_CONTENT, HttpMethod.DELETE);

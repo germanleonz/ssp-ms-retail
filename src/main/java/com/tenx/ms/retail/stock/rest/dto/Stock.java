@@ -1,11 +1,13 @@
 package com.tenx.ms.retail.stock.rest.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 
+@ApiModel("Stock - stock information holder")
 public class Stock {
     @ApiModelProperty(value = "Store Id", readOnly = true)
     private Long storeId;
